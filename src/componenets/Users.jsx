@@ -12,7 +12,7 @@ useEffect(()=>{
         setUsers(data)
     }
     fetchData()
-},[])
+},[users])
 
 const searchUsers= (e)=>{
     let newUsers= users.filter((user)=>(user.email).includes(e.target.value) ||(user.name).includes(e.target.value) )

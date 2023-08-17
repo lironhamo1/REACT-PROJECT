@@ -1,15 +1,18 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState,Text } from "react"
+
 import axios from 'axios'
 import * as utils from '../utils'
-
+import Todos from './Todos'
 const taskUrl='https://jsonplaceholder.typicode.com/todos'
 const userUrl= 'https://jsonplaceholder.typicode.com/users';
 
-const User =(props)=>{
+const User =({user})=>{
     const [isClick, setIsClick] = useState(false);
+    const [user1,setUser1]=useState(user)
+
 
     const hasTask=async ()=>{
-        const tasks=await utils.getUserItems(taskUrl,props.user.id)
+        const tasks=await utils.getUserItems(taskUrl,user1.id)
         const unComplitedTask=tasks.filter((task)=>task.completed===false)
         if (unComplitedTask === null){ //all tasks complited
             return false
@@ -20,32 +23,42 @@ const User =(props)=>{
 
     }
 
-    const updateData= async ()=>{
-
+    const updateData= async()=>{
+        const {data}= await utils.updateItem(userUrl,user.id,user1)
+        console.log(data)
+        
     }
-    const deleteData=()=>{
-        const delete1=utils.deleteItem(userUrl,props.user.id)
+    const deleteData=async()=>{
+        const {data}=await utils.deleteItem(userUrl,user1.id)
+        console.log(data)
+
     }
     const otherData=()=>{
       setIsClick(!isClick)
     }
+
+ 
+
 return (
     <>
-   
     <table border='1' style={{borderColor:hasTask()?'red':'green'}}>
         <tbody>
         <tr>
         <td>
-    ID: {props.user.id}<br/>
-    name: {props.user.name}<br/>
-    email: {props.user.email}<br/>
+            
+     <button >ID:</button>{user.id}<br/>
+
+    name: <input type="text" value={user1.name} onChange={e=>setUser1({...user1,name:e.target.value})}/> <br/>
+    email:  <input type="text" value={user1.email} onChange={e=>setUser1({...user1,email:e.target.value})}/> <br/>
     <button onClick={updateData}>update</button>
     <button onClick={deleteData}>delete</button>
     <button onMouseOver={otherData} onClick={otherData}>other data</button>
+
+
     <div  style={{display:isClick?'block':'none'}}>
-            Street: {props.user.address.city}<br/>
-            City: {props.user.address.street}<br/>
-            Zip Code: {props.user.address.zipcode}<br/>
+            Street: {user1.address.city}<br/>
+            City: {user1.address.street}<br/>
+            Zip Code: {user1.address.zipcode}<br/>
     </div>
     </td>
      </tr>

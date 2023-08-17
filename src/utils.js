@@ -9,11 +9,13 @@ const getUserItems = async (url, userId) => {
   return data
 };
 
-const deleteItem = (url, user_id) => {
-  console.log(user_id)
-  axios.delete(`${url}?id=${user_id}`)
-};
+const deleteItem = (url, user_id) => (
+  axios.delete(`${url}/${user_id}`)
+  )
 
-const updateItem = (url, id,obj) => axios.put(`${url}/${id}`,obj);
+const updateItem = (url, id, obj) => (axios.patch(`${url}/${id}`, obj));
 
-export { getAll, getItem, getUserItems,deleteItem,updateItem }
+const updateTodo = (url, id) => (axios.patch(`${url}/${id}`, {completed: 'True'}));
+
+
+export { getAll, getItem, getUserItems,deleteItem,updateItem ,updateTodo}
